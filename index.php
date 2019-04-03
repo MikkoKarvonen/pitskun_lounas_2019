@@ -5,16 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-    <table>
+    <nav class="navbar navbar-light bg-light center">
+        <span class="navbar-brand" href="">
+            🍴 Pitskun lounas 2019 🍴
+        </span>
+    </nav>
+    <table class="table table-hover">
         <thead>
             <tr>
-                <th></th>
-                <th>Lounas</th>
-                <th>Kasvis</th>
-                <th>Deli</th>
-                <th>Jälkiruoka</th>
+                <th scope="col"></th>
+                <th scope="col">Lounas</th>
+                <th scope="col">Kasvis</th>
+                <th scope="col">Deli</th>
+                <th scope="col">Jälkiruoka</th>
             </tr>
         </thead>
         <tbody>
@@ -32,7 +39,7 @@
                     if (empty($res[courses])){
                         $missed++;
                     }else {
-                        $dayContent = '<td>'.$days[$today->format('w')].'<br>'.$today->format('j.n.').'</td>';
+                        $dayContent = '<th scope="row">'.$days[$today->format('w')].'<br>'.$today->format('j.n.').'</th>';
                         foreach($res[courses] as $r) {
                             $dayContent .= '<td>'.$r[title_fi] .'<br>'. $r[properties].'</td>';
                         }
@@ -50,5 +57,8 @@
             ?>
         </tbody>
     </table>
+    <div class="footer-copyright text-center py-3">© 2019: 
+        <a href="https://github.com/MikkoKarvonen/pitskun_lounas_2019" target="_blank">Mikko Karvonen</a>
+    </div>
 </body>
 </html>
