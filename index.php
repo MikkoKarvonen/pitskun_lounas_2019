@@ -14,8 +14,8 @@
             🍴 Pitskun lounas 2019 🍴
         </span>
     </nav>
-    <table class="table table-hover">
-        <thead>
+    <table class="table">
+        <thead class="thead-dark">
             <tr>
                 <th scope="col"></th>
                 <th scope="col">Lounas</th>
@@ -31,6 +31,8 @@
             $missed = 0;
             $days = ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe'];
 
+            echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
+
             while($weeks < 4){
                 if ($today->format('N') < 6){
                     $url = 'https://www.sodexo.fi/ruokalistat/output/daily_json/27793/'.$today->format('Y/m/d').'/fi';
@@ -39,6 +41,9 @@
                     if (empty($res[courses])){
                         $missed++;
                     }else {
+                        if ($today->format('N') == 1 && $weeks > 0){
+                            echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
+                        }
                         $dayContent = '<th scope="row">'.$days[$today->format('w')].'<br>'.$today->format('j.n.').'</th>';
                         foreach($res[courses] as $r) {
                             $dayContent .= '<td>'.$r[title_fi] .'<br>'. $r[properties].'</td>';
