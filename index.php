@@ -26,6 +26,14 @@
         </thead>
         <tbody>
             <?php
+            include 'credentials.php';
+            $conn = new mysqli($servername, $username, $password, $dbname);
+            
+            // Check connection
+            if ($conn->connect_error) {
+                die("Connection failed: " . $conn->connect_error);
+            } 
+
             $today = new DateTime();
             $weeks = 0;
             $missed = 0;
@@ -36,15 +44,25 @@
 
             while($weeks < 4){
                 if ($today->format('N') < 6){
-                    $url = 'https://www.sodexo.fi/ruokalistat/output/daily_json/27793/'.$today->format('Y/m/d').'/fi';
-                    $result = file_get_contents($url);
-                    $res = json_decode($result, true);
-                    if (empty($res[courses])){
-                        $missed++;
-                        if ($today->format('N') == 1){
-                            $missedMonday = true;
+                    $sql = "SELECT * FROM courses WHERE day='".$today->format('Y-m-d')."';";
+                    $result = $conn->query($sql);
+
+                    if ($result->num_rows == 0) {
+                        $url = 'https://www.sodexo.fi/ruokalistat/output/daily_json/27793/'.$today->format('Y/m/d').'/fi';
+                        $result = file_get_contents($url);
+                        $res = json_decode($result, true);
+                        foreach($res['courses'] as $r) {
+                            $sql = "INSERT INTO courses (day, category, name, properties)
+                            VALUES ('".$today->format('Y-m-d')."', '".$r[category]."', '".$r[title_fi]."', '".$r[properties]."')";
+                            if ($conn->query($sql) === false) {
+                                echo "Error: " . $sql . "<br>" . $conn->error;
+                            }
                         }
-                    }else {
+                        $sql = "SELECT * FROM courses WHERE day='".$today->format('Y-m-d')."';";
+                        $result = $conn->query($sql);
+                    }
+
+                    if ($result->num_rows > 0) {
                         if ($missed > 0){
                             $missed = 0;
                         }
@@ -53,12 +71,17 @@
                             if ($missedMonday){
                                 $missedMonday = false;
                             }
-                        }
+                        }       
                         $dayContent = '<th scope="row">'.$days[$today->format('w')].'<br>'.$today->format('j.n.').'</th>';
-                        foreach($res[courses] as $r) {
-                            $dayContent .= '<td>'.$r[title_fi] .'<br>'. $r[properties].'</td>';
+                        while($row = $result->fetch_assoc()) {
+                            $dayContent .= '<td>'.$row["name"] .'<br>'. $row["properties"].'</td>';
                         }
-                        echo '<tr>'.$dayContent.'</tr>';
+                        echo '<tr>'.$dayContent.'</tr>';        
+                    } else {
+                        $missed++;
+                        if ($today->format('N') == 1){
+                            $missedMonday = true;
+                        }
                     }
                     if ($today->format('N') == 5){
                         $weeks++;
@@ -69,6 +92,7 @@
                 }
                 $today->modify( '+1 days' );
             }
+            $conn->close();
             ?>
         </tbody>
     </table>
