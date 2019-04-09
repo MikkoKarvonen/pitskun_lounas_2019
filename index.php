@@ -29,6 +29,7 @@
             $today = new DateTime();
             $weeks = 0;
             $missed = 0;
+            $missedMonday = false;
             $days = ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe'];
 
             echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
@@ -40,9 +41,18 @@
                     $res = json_decode($result, true);
                     if (empty($res[courses])){
                         $missed++;
+                        if ($today->format('N') == 1){
+                            $missedMonday = true;
+                        }
                     }else {
-                        if ($today->format('N') == 1 && $weeks > 0){
+                        if ($missed > 0){
+                            $missed = 0;
+                        }
+                        if (($today->format('N') == 1 || $missedMonday) && $weeks > 0){
                             echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
+                            if ($missedMonday){
+                                $missedMonday = false;
+                            }
                         }
                         $dayContent = '<th scope="row">'.$days[$today->format('w')].'<br>'.$today->format('j.n.').'</th>';
                         foreach($res[courses] as $r) {
