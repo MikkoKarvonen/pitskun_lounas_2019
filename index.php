@@ -97,7 +97,7 @@
         </tbody>
     </table>
     <div class="footer-copyright text-center py-3">© 2019: 
-        <a href="https://github.com/MikkoKarvonen/pitskun_lounas_2019" target="_blank">Mikko Karvonen</a>
+        <a href="https://github.com/MikkoKarvonen/pitskun_lounas_2019/tree/databaseBranch" target="_blank">Mikko Karvonen</a>
     </div>
 </body>
 </html>
