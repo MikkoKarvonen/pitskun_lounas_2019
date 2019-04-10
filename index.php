@@ -39,7 +39,7 @@
 
             echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
 
-            while($weeks < 1){
+            while($weeks < 4){
                 if ($today->format('N') < 6){
                     $url = 'https://www.sodexo.fi/ruokalistat/output/daily_json/27793/'.$today->format('Y/m/d').'/fi';
                     $result = file_get_contents($url);
