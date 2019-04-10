@@ -14,6 +14,11 @@
             🍴 Pitskun lounas 2019 🍴
         </span>
     </nav>
+    <div class="container">
+        <div class="alert alert-danger" role="alert">
+            Tietokannan kautta datan hakeva versio löytyy osoitteesta <a class="alert-link" href="http://www.pitskunlounas.site/">http://www.pitskunlounas.site/</a>. Aukeaa noin viisi kertaa nopeammin!
+        </div>
+    </div>
     <table class="table">
         <thead class="thead-dark">
             <tr>
@@ -34,7 +39,7 @@
 
             echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
 
-            while($weeks < 4){
+            while($weeks < 1){
                 if ($today->format('N') < 6){
                     $url = 'https://www.sodexo.fi/ruokalistat/output/daily_json/27793/'.$today->format('Y/m/d').'/fi';
                     $result = file_get_contents($url);
