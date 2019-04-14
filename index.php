@@ -39,15 +39,27 @@
             $missed = 0;
             $missedMonday = false;
             $days = ['Su', 'Ma', 'Ti', 'Ke', 'To', 'Pe'];
+            $curlJson = false;
 
             echo '<td colspan="5" class="table-secondary text-center">Viikko '.$today->format("W").'</td>';
+
+            $sql = "SELECT date FROM checked WHERE date='".$today->format('Y-m-d')."';";
+            $checkedToday = $conn->query($sql);
+            
+            if ($checkedToday->num_rows == 0) {
+                $sql = "INSERT INTO checked (checked, date) VALUES (true, '".$today->format('Y-m-d')."')";
+                if ($conn->query($sql) === false) {
+                    echo "Error: " . $sql . "<br>" . $conn->error;
+                }
+                $curlJson = true;
+            }
 
             while($weeks < 4){
                 if ($today->format('N') < 6){
                     $sql = "SELECT * FROM courses WHERE day='".$today->format('Y-m-d')."';";
                     $result = $conn->query($sql);
 
-                    if ($result->num_rows == 0) {
+                    if ($result->num_rows == 0 && $curlJson) {
                         $url = 'https://www.sodexo.fi/ruokalistat/output/daily_json/27793/'.$today->format('Y/m/d').'/fi';
                         $result = file_get_contents($url);
                         $res = json_decode($result, true);
@@ -58,9 +70,9 @@
                                 echo "Error: " . $sql . "<br>" . $conn->error;
                             }
                         }
-                        $sql = "SELECT * FROM courses WHERE day='".$today->format('Y-m-d')."';";
-                        $result = $conn->query($sql);
                     }
+                    $sql = "SELECT * FROM courses WHERE day='".$today->format('Y-m-d')."';";
+                    $result = $conn->query($sql);
 
                     if ($result->num_rows > 0) {
                         if ($missed > 0){
