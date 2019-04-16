@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pitskun lounas 2019</title>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+    <link href="css/toastr.css" rel="stylesheet"/>
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
@@ -111,5 +112,17 @@
     <div class="footer-copyright text-center py-3">© 2019: 
         <a href="https://github.com/MikkoKarvonen/pitskun_lounas_2019/tree/databaseBranch" target="_blank">Mikko Karvonen</a>
     </div>
+    <script src="js/jquery.js"></script>
+    <script src="js/toastr.js"></script>
+    <script>
+        toastr.options = {
+            "closeButton": true,
+            "positionClass": "toast-bottom-right",
+            "timeOut": "5000",
+            "extendedTimeOut": "5000",
+        }
+
+        Command: toastr["info"]("<a href='https://forms.gle/MXL68yVADLMLGrjC8' target='blank'>Miten sivua voisi parantaa?</a>")
+    </script>
 </body>
 </html>
